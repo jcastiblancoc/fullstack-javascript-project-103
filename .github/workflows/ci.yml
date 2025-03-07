@@ -28,13 +28,18 @@ jobs:
       - name: Run linter
         run: npm run lint
 
+      - name: Download CodeClimate Test Reporter
+        run: curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+
+      - name: Set permissions for CodeClimate Test Reporter
+        run: chmod +x ./cc-test-reporter
+
       - name: Run tests with coverage
         run: npm test -- --coverage --coverageReporters=text-lcov > coverage.lcov
 
-      - name: Upload coverage to CodeClimate
+      - name: Format and upload coverage to CodeClimate
         run: |
-          npm install --save-dev @codeclimate/test-reporter
-          npx @codeclimate/test-reporter format-coverage -t lcov -o coverage.json
-          npx @codeclimate/test-reporter upload-coverage --input coverage.json
+          ./cc-test-reporter format-coverage -t lcov -o coverage.json
+          ./cc-test-reporter upload-coverage --input coverage.json
         env:
-            CODECLIMATE_REPO_TOKEN: ${{ secrets.CODECLIMATE_REPO_TOKEN }}
+          CODECLIMATE_REPO_TOKEN: ${{ secrets.CODECLIMATE_REPO_TOKEN }}
