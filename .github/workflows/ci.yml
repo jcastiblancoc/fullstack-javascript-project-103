@@ -33,7 +33,8 @@ jobs:
 
       - name: Upload coverage to CodeClimate
         run: |
-          npm install --save-dev codeclimate-test-reporter
-          npx codeclimate-test-reporter < coverage.lcov
+          npm install --save-dev @codeclimate/test-reporter
+          npx @codeclimate/test-reporter format-coverage -t lcov -o coverage.json
+          npx @codeclimate/test-reporter upload-coverage --input coverage.json
         env:
             CODECLIMATE_REPO_TOKEN: ${{ secrets.CODECLIMATE_REPO_TOKEN }}
