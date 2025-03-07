@@ -42,4 +42,4 @@ jobs:
           ./cc-test-reporter format-coverage coverage/lcov.info -t lcov -o coverage.json
           ./cc-test-reporter upload-coverage --input coverage.json
         env:
-          CODECLIMATE_REPO_TOKEN: ${{ secrets.CODECLIMATE_REPO_TOKEN }}
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
