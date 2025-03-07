@@ -1,0 +1,33 @@
+{
+  "name": "@hexlet/code",
+  "version": "1.0.0",
+  "description": "Difference Calc Project 2 Codica",
+  "main": "gendiff.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/jcastiblancoc/fullstack-javascript-project-103.git"
+  },
+  "author": "Jeisson Castiblanco Carrera",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jcastiblancoc/fullstack-javascript-project-103/issues"
+  },
+  "homepage": "https://github.com/jcastiblancoc/fullstack-javascript-project-103#readme",
+  "dependencies": {
+    "commander": "^13.1.0",
+    "lodash": "^4.17.21"
+  },
+  "bin": {
+    "gendiff": "./gendiff.js"
+  },
+  "type": "module",
+  "devDependencies": {
+    "@eslint/js": "^9.21.0",
+    "eslint": "^9.21.0",
+    "globals": "^16.0.0",
+    "jest": "^29.7.0"
+  }
+}
