@@ -17,7 +17,6 @@ Thumbs.db
 
 # Build and cache
 dist/
-coverage/
 .nyc_output/
 *.log
 
@@ -25,11 +24,7 @@ coverage/
 jest.*
 __tests__/fixtures/
 
-# Ignorar todo en coverage/
-coverage/
 
-# Pero permitir coverage/lcov.info
-!coverage/lcov.info
 
 # GitHub Actions
 .github/workflows/*.log

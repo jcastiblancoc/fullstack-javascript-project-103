@@ -43,4 +43,3 @@ jobs:
           ./cc-test-reporter upload-coverage --input coverage.json
         env:
           CODECLIMATE_REPO_TOKEN: ${{ secrets.CODECLIMATE_REPO_TOKEN }}
-      
