@@ -39,7 +39,8 @@ jobs:
 
       - name: Format and upload coverage to CodeClimate
         run: |
-          ./cc-test-reporter format-coverage -t lcov -o coverage.json
+          ./cc-test-reporter format-coverage coverage/lcov.info -t lcov -o coverage.json
           ./cc-test-reporter upload-coverage --input coverage.json
         env:
           CODECLIMATE_REPO_TOKEN: ${{ secrets.CODECLIMATE_REPO_TOKEN }}
+      

@@ -25,9 +25,11 @@ coverage/
 jest.*
 __tests__/fixtures/
 
-# CodeClimate & Coverage
-coverage.lcov
-.codeclimate.yml
+# Ignorar todo en coverage/
+coverage/
+
+# Pero permitir coverage/lcov.info
+!coverage/lcov.info
 
 # GitHub Actions
 .github/workflows/*.log
