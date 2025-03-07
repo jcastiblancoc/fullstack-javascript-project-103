@@ -36,4 +36,4 @@ jobs:
           npm install --save-dev codeclimate-test-reporter
           npx codeclimate-test-reporter < coverage.lcov
         env:
-          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+            CODECLIMATE_REPO_TOKEN: ${{ secrets.CODECLIMATE_REPO_TOKEN }}
