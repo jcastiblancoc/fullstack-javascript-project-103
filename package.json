@@ -19,6 +19,7 @@
   "homepage": "https://github.com/jcastiblancoc/fullstack-javascript-project-103#readme",
   "dependencies": {
     "commander": "^13.1.0",
+    "js-yaml": "^4.1.0",
     "lodash": "^4.17.21"
   },
   "bin": {

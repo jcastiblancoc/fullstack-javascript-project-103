@@ -1,32 +1,41 @@
-import _ from 'lodash';
-import parseFile from './parser.js';
+import path from 'path';
+import { readFileSync } from 'fs';
+import yaml from 'js-yaml';
 
-/**
- * Genera la diferencia entre dos archivos JSON.
- * @param {string} filepath1 - Ruta del primer archivo.
- * @param {string} filepath2 - Ruta del segundo archivo.
- * @returns {string} - Diferencias en formato de texto.
- */
+const getAbsolutePath = (filepath) => path.resolve(process.cwd(), filepath);
+
+const parseFile = (filepath) => {
+    const absolutePath = getAbsolutePath(filepath);
+    const fileContent = readFileSync(absolutePath, 'utf-8');
+
+    if (filepath.endsWith('.json')) {
+        return JSON.parse(fileContent);
+    }
+    if (filepath.endsWith('.yml') || filepath.endsWith('.yaml')) {
+        return yaml.load(fileContent);
+    }
+    throw new Error(`Unsupported file format: ${filepath}`);
+};
+
 const genDiff = (filepath1, filepath2) => {
-    const data1 = parseFile(filepath1);
-    const data2 = parseFile(filepath2);
+    const obj1 = parseFile(filepath1);
+    const obj2 = parseFile(filepath2);
 
-    const keys = _.sortBy(_.union(Object.keys(data1), Object.keys(data2))); // Obtener claves ordenadas
-
-    const diff = keys.map((key) => {
-        if (!Object.hasOwn(data2, key)) {
-            return `  - ${key}: ${data1[key]}`; // Clave solo en el primer archivo
+    const keys = [...new Set([...Object.keys(obj1), ...Object.keys(obj2)])].sort();
+    const result = keys.map((key) => {
+        if (!Object.hasOwn(obj1, key)) {
+            return `  + ${key}: ${obj2[key]}`;
         }
-        if (!Object.hasOwn(data1, key)) {
-            return `  + ${key}: ${data2[key]}`; // Clave solo en el segundo archivo
+        if (!Object.hasOwn(obj2, key)) {
+            return `  - ${key}: ${obj1[key]}`;
         }
-        if (data1[key] !== data2[key]) {
-            return `  - ${key}: ${data1[key]}\n  + ${key}: ${data2[key]}`; // Clave con valores diferentes
+        if (obj1[key] !== obj2[key]) {
+            return `  - ${key}: ${obj1[key]}\n  + ${key}: ${obj2[key]}`;
         }
-        return `    ${key}: ${data1[key]}`; // Clave con el mismo valor en ambos archivos
+        return `    ${key}: ${obj1[key]}`;
     });
 
-    return `{\n${diff.join('\n')}\n}`;
+    return `{\n${result.join('\n')}\n}`;
 };
 
 export default genDiff;
