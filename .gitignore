@@ -17,15 +17,13 @@ Thumbs.db
 
 # Build and cache
 dist/
+coverage/
 .nyc_output/
 *.log
 
 # Jest & Testing
 jest.*
 __tests__/fixtures/
-
-# Ignorar todo en coverage/
-coverage/
 
 # Pero permitir coverage/lcov.info
 !coverage/lcov.info
