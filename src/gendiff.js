@@ -2,7 +2,7 @@ import path from 'path';
 import { readFileSync } from 'fs';
 import yaml from 'js-yaml';
 
-const getAbsolutePath = (filepath) => path.resolve(process.cwd(), filepath);
+const getAbsolutePath = (filepath) => path.resolve(__dirname, '..', filepath);
 
 const parseFile = (filepath) => {
     const absolutePath = getAbsolutePath(filepath);
