@@ -6,7 +6,7 @@ import yaml from 'js-yaml';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const getAbsolutePath = (filepath) => path.resolve(__dirname, '..', filepath);
+const getAbsolutePath = (filepath) => path.resolve(__dirname, '__tests__', filepath);
 
 const parseFile = (filepath) => {
     const absolutePath = getAbsolutePath(filepath);
