@@ -1,10 +1,12 @@
 import { test, expect } from '@jest/globals';
 import genDiff from '../src/gendiff.js';
 
-test('gendiff flat JSON', () => {
-    const filepath1 = '__fixtures__/file1.json';
-    const filepath2 = '__fixtures__/file2.json';
-    const expected = `{
+describe.each([
+    ['JSON', '__fixtures__/file1.json', '__fixtures__/file2.json'],
+    ['YAML', '__fixtures__/file1.yml', '__fixtures__/file2.yml'],
+])('gendiff flat %s', (format, filepath1, filepath2) => {
+    test(`gendiff flat ${format}`, () => {
+        const expected = `{
   - follow: false
     host: codica.io
   - proxy: 123.234.53.22
@@ -12,19 +14,6 @@ test('gendiff flat JSON', () => {
   + timeout: 20
   + verbose: true
 }`;
-    expect(genDiff(filepath1, filepath2)).toBe(expected);
-});
-
-test('gendiff flat YAML', () => {
-    const filepath1 = '__fixtures__/file1.yml';
-    const filepath2 = '__fixtures__/file2.yml';
-    const expected = `{
-  - follow: false
-    host: codica.io
-  - proxy: 123.234.53.22
-  - timeout: 50
-  + timeout: 20
-  + verbose: true
-}`;
-    expect(genDiff(filepath1, filepath2)).toBe(expected);
+        expect(genDiff(filepath1, filepath2)).toBe(expected);
+    });
 });
