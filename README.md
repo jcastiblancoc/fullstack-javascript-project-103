@@ -10,3 +10,7 @@
 ## Asciinema YAML comparitions
 
 [![asciicast](https://asciinema.org/a/qECFAFbUo4G1f8psRj8JCA7FF.svg)](https://asciinema.org/a/qECFAFbUo4G1f8psRj8JCA7FF)
+
+## Asciinema Recursive comparition
+
+[![asciicast](https://asciinema.org/a/f7DA9DICQOOIki2gJFTbUWnuE.svg)](https://asciinema.org/a/f7DA9DICQOOIki2gJFTbUWnuE)
