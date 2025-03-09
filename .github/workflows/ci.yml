@@ -33,7 +33,7 @@ jobs:
       - name: 🏗️ Prepare CodeClimate
         run: cc-test-reporter before-build
         env:
-          CODECLIMATE_REPO_TOKEN: ${{ secrets.CODECLIMATE_REPO_TOKEN }}
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
 
       - name: 🧪 Run tests with coverage
         run: npm test -- --coverage
@@ -41,4 +41,4 @@ jobs:
       - name: 📤 Upload coverage to CodeClimate
         run: cc-test-reporter after-build --exit-code $?
         env:
-          CODECLIMATE_REPO_TOKEN: ${{ secrets.CODECLIMATE_REPO_TOKEN }}
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
