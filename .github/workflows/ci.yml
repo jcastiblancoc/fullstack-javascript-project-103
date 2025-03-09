@@ -24,17 +24,21 @@ jobs:
       - name: 🎨 Run ESLint
         run: npm run lint
 
-      - name: 🚀 Install CodeClimate test-reporter
+      - name: 🚀 Download and Setup CodeClimate test-reporter
         run: |
-          curl -L https://github.com/codeclimate/test-reporter/releases/latest/download/test-reporter-linux-amd64 -o cc-test-reporter
+          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > cc-test-reporter
           chmod +x cc-test-reporter
-          ./cc-test-reporter before-build
+          mv cc-test-reporter /usr/local/bin/
+
+      - name: 🏗️ Prepare CodeClimate
+        run: cc-test-reporter before-build
+        env:
+          CODECLIMATE_REPO_TOKEN: ${{ secrets.CODECLIMATE_REPO_TOKEN }}
 
       - name: 🧪 Run tests with coverage
         run: npm test -- --coverage
 
       - name: 📤 Upload coverage to CodeClimate
+        run: cc-test-reporter after-build --exit-code $?
         env:
           CODECLIMATE_REPO_TOKEN: ${{ secrets.CODECLIMATE_REPO_TOKEN }}
-        run: |
-          ./cc-test-reporter after-build --exit-code $?
