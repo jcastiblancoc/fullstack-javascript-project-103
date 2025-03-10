@@ -1,23 +1,23 @@
 import yaml from 'js-yaml';
 import path from 'path';
 
-const getFormat = (filepath) => {
-    const ext = path.extname(filepath).slice(1);
-    console.log(`Detectando formato de ${filepath}: ${ext}`); // TEMPORAL
-    return ext;
+const parsers = {
+  json: JSON.parse,
+  yaml: yaml.load,
+  yml: yaml.load,
 };
 
-const parse = (data, filepath) => {
-    const format = getFormat(filepath);
+export default function parseFile(data, filepath) {
+  const extension = path.extname(filepath).slice(1);
+  const parser = parsers[extension];
 
-    if (format === 'json') {
-        return JSON.parse(data);
-    }
-    if (format === 'yml' || format === 'yaml') {
-        return yaml.load(data);
-    }
+  if (!parser) {
+    throw new Error(`Unsupported file extension "${extension}".`);
+  }
 
-    throw new Error(`Unsupported format: ${format}`);
-};
-
-export default parse;
+  try {
+    return parser(data);
+  } catch (error) {
+    throw new Error(`Failed to parse file "${filepath}": ${error.message}`);
+  }
+}
