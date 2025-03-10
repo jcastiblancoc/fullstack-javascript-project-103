@@ -1,13 +1,18 @@
-import readFile from './fileReader.js';
+import formatStylish from './formatters/stylish.js';
+import formatPlain from './formatters/plain.js';
+import formatJson from './formatters/json.js';
 
-const genDiff = (filepath1, filepath2) => {
-    const data1 = readFile(filepath1);
-    const data2 = readFile(filepath2);
-
-    return {
-        file1: data1,
-        file2: data2,
-    };
+const formatDiff = (diffTree, format) => {
+    switch (format) {
+        case 'stylish':
+            return formatStylish(diffTree);
+        case 'plain':
+            return formatPlain(diffTree);
+        case 'json':
+            return formatJson(diffTree);
+        default:
+            throw new Error(`Unsupported format: ${format}`);
+    }
 };
 
-export default genDiff;
+export default formatDiff;

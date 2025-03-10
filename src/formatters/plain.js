@@ -1,27 +1,34 @@
-const formatPlain = (diff) => {
-    const iter = (nodes, path) =>
-        nodes
-            .flatMap(({ key, type, value, oldValue, newValue, children }) => {
-                const fullPath = [...path, key].join('.');
-
+const formatPlain = (diffTree) => {
+    const iter = (nodes, path) => {
+        return nodes
+            .map(({ key, type, value, oldValue, newValue, children }) => {
+                const fullPath = path ? `${path}.${key}` : key;
                 switch (type) {
                     case 'added':
-                        return `Property '${fullPath}' was added with value: ${JSON.stringify(value)}`;
+                        return `Property '${fullPath}' was added with value: ${formatValue(value)}`;
                     case 'removed':
                         return `Property '${fullPath}' was removed`;
-                    case 'changed':
-                        return `Property '${fullPath}' was updated. From ${JSON.stringify(oldValue)} to ${JSON.stringify(newValue)}`;
+                    case 'modified':
+                        return `Property '${fullPath}' was updated. From ${formatValue(oldValue)} to ${formatValue(newValue)}`;
                     case 'nested':
-                        return iter(children, [...path, key]);
-                    case 'unchanged':
-                        return [];
+                        return iter(children, fullPath); // 👈 Quitamos `.join('\n')` aquí
                     default:
-                        throw new Error(`Unknown type: ${type}`);
+                        return null;
                 }
             })
-            .join('\n');
+            .filter((line) => line !== null) // Eliminamos valores nulos
+            .flat(); // 👈 Aplanamos el array para evitar estructuras anidadas
+    };
 
-    return iter(diff, []);
+    return iter(diffTree, '').join('\n'); // 👈 Unimos el array en un string final
+};
+
+// Función auxiliar para manejar valores complejos
+const formatValue = (value) => {
+    if (typeof value === 'object' && value !== null) {
+        return '[complex value]';
+    }
+    return typeof value === 'string' ? `'${value}'` : String(value);
 };
 
 export default formatPlain;

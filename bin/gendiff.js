@@ -5,7 +5,7 @@ import fs from 'fs';
 import path from 'path';
 import yaml from 'js-yaml';
 import buildDiffTree from '../src/buildDiff.js';
-import formatStylish from '../src/formatters/stylish.js';
+import formatDiff from '../src/index.js';
 
 const parseFile = (filepath) => {
     const fullPath = path.resolve(process.cwd(), filepath);
@@ -15,11 +15,11 @@ const parseFile = (filepath) => {
     return ext === 'json' ? JSON.parse(content) : yaml.load(content);
 };
 
-export const genDiff = (filepath1, filepath2) => {
+export const genDiff = (filepath1, filepath2, format = 'stylish') => {
     const obj1 = parseFile(filepath1);
     const obj2 = parseFile(filepath2);
     const diffTree = buildDiffTree(obj1, obj2);
-    return formatStylish(diffTree);
+    return formatDiff(diffTree, format);
 };
 
 const program = new Command();
@@ -30,10 +30,11 @@ program
     .version('1.0.0')
     .argument('<filepath1>')
     .argument('<filepath2>')
-    .action((filepath1, filepath2) => {
-        console.log(genDiff(filepath1, filepath2));  // Asegúrate de que esto esté presente
+    .option('-f, --format <type>', 'formato de salida (stylish, plain)', 'stylish')
+    .action((filepath1, filepath2, options) => {
+        console.log(genDiff(filepath1, filepath2, options.format));
     });
 
-    if (import.meta.url === `file://${process.argv[1]}`) {
-        program.parse();
-    }
+if (import.meta.url === `file://${process.argv[1]}`) {
+    program.parse();
+}

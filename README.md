@@ -14,3 +14,7 @@
 ## Asciinema Recursive comparition
 
 [![asciicast](https://asciinema.org/a/f7DA9DICQOOIki2gJFTbUWnuE.svg)](https://asciinema.org/a/f7DA9DICQOOIki2gJFTbUWnuE)
+
+## Asciinema Plain format
+
+[![asciicast](https://asciinema.org/a/mUfYIjvttEbBCuJxyWqKPJr3O.svg)](https://asciinema.org/a/mUfYIjvttEbBCuJxyWqKPJr3O)
