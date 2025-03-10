@@ -1,34 +1,36 @@
-const formatPlain = (diffTree) => {
-    const iter = (nodes, path) => {
-        return nodes
-            .map(({ key, type, value, oldValue, newValue, children }) => {
-                const fullPath = path ? `${path}.${key}` : key;
-                switch (type) {
-                    case 'added':
-                        return `Property '${fullPath}' was added with value: ${formatValue(value)}`;
-                    case 'removed':
-                        return `Property '${fullPath}' was removed`;
-                    case 'modified':
-                        return `Property '${fullPath}' was updated. From ${formatValue(oldValue)} to ${formatValue(newValue)}`;
-                    case 'nested':
-                        return iter(children, fullPath); // 👈 Quitamos `.join('\n')` aquí
-                    default:
-                        return null;
-                }
-            })
-            .filter((line) => line !== null) // Eliminamos valores nulos
-            .flat(); // 👈 Aplanamos el array para evitar estructuras anidadas
-    };
+import _ from 'lodash';
+import {
+  ADD_VALUE, CHANGED_VALUE, DELETED_VALUE, NESTED_VALUE, ROOT_VALUE, UNCHANGED_VALUE,
+} from '../../src/constants.js';
 
-    return iter(diffTree, '').join('\n'); // 👈 Unimos el array en un string final
-};
 
-// Función auxiliar para manejar valores complejos
+const buildPropertyPath = (property, ancestors) => [...ancestors, property].join('.');
 const formatValue = (value) => {
-    if (typeof value === 'object' && value !== null) {
-        return '[complex value]';
-    }
-    return typeof value === 'string' ? `'${value}'` : String(value);
+  if (value === null) return value;
+
+  if (_.isObject(value)) return '[complex value]';
+
+  return typeof value === 'string' ? `'${value}'` : String(value);
 };
 
-export default formatPlain;
+const nodeHandlers = {
+  [ADD_VALUE]: (node, path) => `Property '${buildPropertyPath(node.key, path)}' was added with value: ${formatValue(node.value)}`,
+  [CHANGED_VALUE]: ({ key, value1, value2 }, path) => {
+    const propertyPath = buildPropertyPath(key, path);
+    return `Property '${propertyPath}' was updated. From ${formatValue(value1)} to ${formatValue(value2)}`;
+  },
+  [DELETED_VALUE]: (node, path) => `Property '${buildPropertyPath(node.key, path)}' was removed`,
+  // eslint-disable-next-line max-len
+  [NESTED_VALUE]: ({ key, children }, path, traverse) => children.flatMap((child) => traverse(child, [...path, key])),
+  // eslint-disable-next-line max-len
+  [ROOT_VALUE]: ({ children }, path, traverse) => children.flatMap((child) => traverse(child, path)),
+  [UNCHANGED_VALUE]: () => [],
+
+};
+
+const renderToPlainText = (tree) => {
+  const traverse = (node, currentPath) => nodeHandlers[node.type](node, currentPath, traverse);
+  return traverse(tree, []).join('\n');
+};
+
+export default renderToPlainText;

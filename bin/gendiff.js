@@ -1,40 +1,15 @@
 #!/usr/bin/env node
+import * as commander from 'commander';
+import genDiff from '../index.js';
 
-import { Command } from 'commander';
-import fs from 'fs';
-import path from 'path';
-import yaml from 'js-yaml';
-import buildDiffTree from '../src/buildDiff.js';
-import formatDiff from '../src/index.js';
-
-const parseFile = (filepath) => {
-    const fullPath = path.resolve(process.cwd(), filepath);
-    const ext = path.extname(fullPath).slice(1);
-    const content = fs.readFileSync(fullPath, 'utf-8');
-
-    return ext === 'json' ? JSON.parse(content) : yaml.load(content);
-};
-
-export const genDiff = (filepath1, filepath2, format = 'stylish') => {
-    const obj1 = parseFile(filepath1);
-    const obj2 = parseFile(filepath2);
-    const diffTree = buildDiffTree(obj1, obj2);
-    return formatDiff(diffTree, format);
-};
-
-const program = new Command();
+const { program } = commander;
 
 program
-    .name('gendiff')
-    .description('Compara dos archivos JSON o YAML y muestra la diferencia')
-    .version('1.0.0')
-    .argument('<filepath1>')
-    .argument('<filepath2>')
-    .option('-f, --format <type>', 'formato de salida (stylish, plain)', 'stylish')
-    .action((filepath1, filepath2, options) => {
-        console.log(genDiff(filepath1, filepath2, options.format));
-    });
-
-if (import.meta.url === `file://${process.argv[1]}`) {
-    program.parse();
-}
+    .version('0.0.1')
+    .description('Compares two configuration files and shows a difference.')
+    .arguments('<filepath1> <filepath2>')
+    .option('-f, --format <type>', 'output format', 'stylish')
+    .action((path1, path2) => {
+        console.log(genDiff(path1, path2, program.opts().format));
+    })
+    .parse(process.argv);

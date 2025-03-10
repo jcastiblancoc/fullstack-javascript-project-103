@@ -1,5 +1,4 @@
 import yaml from 'js-yaml';
-import path from 'path';
 
 const parsers = {
   json: JSON.parse,
@@ -7,10 +6,7 @@ const parsers = {
   yml: yaml.load,
 };
 
-export default function parseFile(data, filepath) {
-  const extension = path.extname(filepath).slice(1);
-  console.log(`Detectado formato: "${extension}" en ${filepath}`); // DEBUG
-
+export default function parseFile(data, extension) {
   const parser = parsers[extension];
 
   if (!parser) {
@@ -20,6 +16,6 @@ export default function parseFile(data, filepath) {
   try {
     return parser(data);
   } catch (error) {
-    throw new Error(`Failed to parse file "${filepath}": ${error.message}`);
+    throw new Error(`Failed to parse data with extension "${extension}": ${error.message}`);
   }
 }
