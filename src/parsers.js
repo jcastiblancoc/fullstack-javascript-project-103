@@ -1,11 +1,18 @@
+import yaml from 'js-yaml';
+
+const getFormat = (filepath) => filepath.split('.').pop();
 
 const parse = (data, filepath) => {
-  try {
-      return JSON.parse(data);
-  } catch (error) {
-      console.error(`❌ Error al parsear ${filepath}:`, error.message);
-      process.exit(1);
+  const format = getFormat(filepath);
+
+  if (format === 'json') {
+    return JSON.parse(data);
   }
+  if (format === 'yml' || format === 'yaml') {
+    return yaml.load(data);
+  }
+
+  throw new Error(`Unsupported format: ${format}`);
 };
 
 export default parse;
