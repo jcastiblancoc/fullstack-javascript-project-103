@@ -9,6 +9,8 @@ const parsers = {
 
 export default function parseFile(data, filepath) {
   const extension = path.extname(filepath).slice(1);
+  console.log(`Detectado formato: "${extension}" en ${filepath}`); // DEBUG
+
   const parser = parsers[extension];
 
   if (!parser) {

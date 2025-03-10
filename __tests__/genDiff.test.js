@@ -2,7 +2,7 @@ import { readFileSync } from 'fs';
 import path from 'path';
 import { genDiff } from '../bin/gendiff.js';
 
-const getFixturePath = (filename) => path.join('__tests__/__fixtures__', filename);
+const getFixturePath = (filename) => path.join('__fixtures__', filename);
 const readFixture = (filename) => readFileSync(getFixturePath(filename), 'utf-8').trim();
 
 test('Comparación de archivos JSON anidados con formato stylish', () => {
