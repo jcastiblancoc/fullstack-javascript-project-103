@@ -8,26 +8,19 @@ const genDiff = (filepath1, filepath2) => {
     const absolutePath1 = getAbsolutePath(filepath1);
     const absolutePath2 = getAbsolutePath(filepath2);
 
-    console.log('🛠️ Verificando rutas antes de leer archivos:');
-    console.log('🔹 Ruta 1:', absolutePath1);
-    console.log('🔹 Ruta 2:', absolutePath2);
-
     try {
         const data1 = readFileSync(absolutePath1, 'utf-8');
         const data2 = readFileSync(absolutePath2, 'utf-8');
 
-        console.log('✅ Archivos leídos correctamente');
-        console.log('📄 Contenido 1:', data1);
-        console.log('📄 Contenido 2:', data2);
+        const format1 = path.extname(filepath1).slice(1);
+        const format2 = path.extname(filepath2).slice(1);
 
-        const parsedData1 = parse(data1, filepath1);
-        const parsedData2 = parse(data2, filepath2);
+        const parsedData1 = parse(data1, format1);
+        const parsedData2 = parse(data2, format2);
 
-        console.log('✅ Archivos parseados:', parsedData1, parsedData2);
-        
-        return 'Diferencia calculada (pendiente de implementación)';
+        return { parsedData1, parsedData2 };
     } catch (error) {
-        console.error('❌ Error al leer los archivos:', error);
+        console.error('Error al leer los archivos:', error);
         process.exit(1);
     }
 };
